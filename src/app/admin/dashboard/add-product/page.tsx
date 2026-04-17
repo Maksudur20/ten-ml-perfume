@@ -201,6 +201,9 @@ export default function AddProductPage() {
                 accept="image/*"
                 onChange={handleImageChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500"
+                placeholder="Choose image"
+                title="Select perfume image"
+                aria-label="Perfume image file"
               />
 
               {/* Image Detection Error */}
@@ -314,12 +317,14 @@ export default function AddProductPage() {
                 <div className="mt-6">
                   <p className="text-sm font-semibold text-gray-700 mb-3">Preview</p>
                   <div className="bg-gray-100 rounded-lg border-2 border-gray-200 flex items-center justify-center p-4 min-h-96">
-                    <img
-                      src={imageDataUrl}
-                      alt="Selected perfume product preview"
-                      className="max-w-full max-h-96 object-contain rounded"
-                      title="Selected perfume image"
-                    />
+                    <picture>
+                      <img
+                        src={imageDataUrl}
+                        alt="Selected perfume product preview"
+                        className="max-w-full max-h-96 object-contain rounded"
+                        title="Selected perfume image"
+                      />
+                    </picture>
                   </div>
                 </div>
               )}
@@ -452,6 +457,8 @@ export default function AddProductPage() {
                 checked={formData.isHot}
                 onChange={handleChange}
                 className="w-4 h-4 rounded border-gray-300 focus:ring-burgundy-500"
+                title="Mark as featured product"
+                aria-label="Mark as featured product"
               />
               <label className="text-sm font-semibold text-gray-900">Mark as Featured Product</label>
             </div>
