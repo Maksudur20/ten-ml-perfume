@@ -10,6 +10,8 @@ export async function GET(
   try {
       await connectDB()
 
+    const order = await Order.findById(params.id)
+
     if (!order) {
       return NextResponse.json(
         { message: 'Order not found' },

@@ -29,10 +29,10 @@ export function generateInvoicePDF(
   let yPosition = margin
 
   // Colors
-  const primaryColor = [0, 102, 204] // Blue
-  const headerBgColor = [240, 245, 250]
-  const borderColor = [200, 200, 200]
-  const darkText = [33, 33, 33]
+  const primaryColor: [number, number, number] = [0, 102, 204] // Blue
+  const headerBgColor: [number, number, number] = [240, 245, 250]
+  const borderColor: [number, number, number] = [200, 200, 200]
+  const darkText: [number, number, number] = [33, 33, 33]
 
   // Header
   doc.setFillColor(...headerBgColor)
@@ -41,11 +41,11 @@ export function generateInvoicePDF(
   // Company Info
   doc.setTextColor(...primaryColor)
   doc.setFontSize(24)
-  doc.setFont(undefined, 'bold')
+  doc.setFont('Helvetica', 'bold')
   doc.text(config.companyName || 'TEN ML PERFUME', margin, yPosition + 10)
 
   doc.setFontSize(9)
-  doc.setFont(undefined, 'normal')
+  doc.setFont('Helvetica', 'normal')
   doc.setTextColor(...darkText)
   yPosition = 40 + margin
 
@@ -64,13 +64,13 @@ export function generateInvoicePDF(
 
   // Invoice Title and Details
   doc.setFontSize(14)
-  doc.setFont(undefined, 'bold')
+  doc.setFont('Helvetica', 'bold')
   doc.text('INVOICE', margin, yPosition)
 
   yPosition += 8
 
   doc.setFontSize(10)
-  doc.setFont(undefined, 'normal')
+  doc.setFont('Helvetica', 'normal')
 
   const invoiceDetails = [
     `Invoice #: ${order._id}`,
@@ -87,12 +87,12 @@ export function generateInvoicePDF(
   yPosition += 8
 
   // Bill To Section
-  doc.setFont(undefined, 'bold')
+  doc.setFont('Helvetica', 'bold')
   doc.setFontSize(10)
   doc.text('BILL TO:', margin, yPosition)
   yPosition += 5
 
-  doc.setFont(undefined, 'normal')
+  doc.setFont('Helvetica', 'normal')
   doc.setFontSize(9)
   const billToInfo = [
     order.customerName,
@@ -118,7 +118,7 @@ export function generateInvoicePDF(
 
   doc.setFillColor(...primaryColor)
   doc.setTextColor(255, 255, 255)
-  doc.setFont(undefined, 'bold')
+  doc.setFont('Helvetica', 'bold')
   doc.setFontSize(10)
 
   const tableTop = yPosition
@@ -133,7 +133,7 @@ export function generateInvoicePDF(
 
   // Table Content
   doc.setTextColor(...darkText)
-  doc.setFont(undefined, 'normal')
+  doc.setFont('Helvetica', 'normal')
   doc.setFontSize(9)
 
   order.items.forEach((item) => {
@@ -150,7 +150,7 @@ export function generateInvoicePDF(
   // Summary Section
   const summaryX = pageWidth - margin - 50
 
-  doc.setFont(undefined, 'normal')
+  doc.setFont('Helvetica', 'normal')
   doc.setFontSize(9)
 
   doc.text('Subtotal:', summaryX, yPosition)
@@ -175,7 +175,7 @@ export function generateInvoicePDF(
     yPosition += 5
   }
 
-  doc.setFont(undefined, 'bold')
+  doc.setFont('Helvetica', 'bold')
   doc.setFontSize(10)
   doc.text('TOTAL:', summaryX, yPosition)
   doc.text(`৳${order.total.toFixed(2)}`, pageWidth - margin, yPosition, {
@@ -185,7 +185,7 @@ export function generateInvoicePDF(
   // Footer
   yPosition = pageHeight - 30
   doc.setFontSize(8)
-  doc.setFont(undefined, 'normal')
+  doc.setFont('Helvetica', 'normal')
   doc.setTextColor(100, 100, 100)
   doc.text('Thank you for your purchase!', margin, yPosition)
   doc.text(
