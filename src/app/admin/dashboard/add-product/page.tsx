@@ -313,11 +313,12 @@ export default function AddProductPage() {
               {imageDataUrl && imageInfo && (
                 <div className="mt-6">
                   <p className="text-sm font-semibold text-gray-700 mb-3">Preview</p>
-                  <div className="bg-gray-100 rounded-lg border-2 border-gray-200 flex items-center justify-center p-4" style={{ minHeight: '300px' }}>
+                  <div className="bg-gray-100 rounded-lg border-2 border-gray-200 flex items-center justify-center p-4 min-h-96">
                     <img
                       src={imageDataUrl}
-                      alt="Selected perfume"
+                      alt="Selected perfume product preview"
                       className="max-w-full max-h-96 object-contain rounded"
+                      title="Selected perfume image"
                     />
                   </div>
                 </div>
@@ -336,6 +337,8 @@ export default function AddProductPage() {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500"
                 required
+                title="Brand name"
+                aria-label="Brand name"
               />
             </div>
 
@@ -351,6 +354,8 @@ export default function AddProductPage() {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500"
                 required
+                title="Product name"
+                aria-label="Product name"
               />
             </div>
 
@@ -362,6 +367,8 @@ export default function AddProductPage() {
                 value={formData.category}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500"
+                title="Product category"
+                aria-label="Product category"
               >
                 <option value="men">Men</option>
                 <option value="women">Women</option>
@@ -398,6 +405,8 @@ export default function AddProductPage() {
                           }
                           disabled={!enabled}
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500 disabled:bg-gray-100"
+                          title={`Price for ${size} ML`}
+                          aria-label={`Price for ${size} ML`}
                         />
                       </div>
                     </div>
@@ -415,6 +424,8 @@ export default function AddProductPage() {
                 onChange={handleChange}
                 rows={4}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500"
+                title="Product description"
+                aria-label="Product description"
               />
             </div>
 
@@ -428,6 +439,8 @@ export default function AddProductPage() {
                 onChange={handleChange}
                 placeholder="e.g., Ambroxan, Citrus, Vanilla (comma-separated)"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500"
+                title="Fragrance notes"
+                aria-label="Fragrance notes"
               />
             </div>
 

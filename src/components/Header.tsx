@@ -113,6 +113,8 @@ export function Header() {
                       setShowResults(false)
                     }}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    aria-label="Clear search"
+                    title="Clear search"
                   >
                     <X size={18} />
                   </button>
@@ -163,7 +165,11 @@ export function Header() {
               <span>💬</span>
               <span className="text-sm font-semibold">WhatsApp</span>
             </a>
-            <button className="text-gray-600 hover:text-burgundy-700 transition">
+            <button 
+              className="text-gray-600 hover:text-burgundy-700 transition"
+              aria-label="User account"
+              title="User account"
+            >
               <User size={20} />
             </button>
             <Link
