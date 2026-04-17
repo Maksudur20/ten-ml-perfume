@@ -16,8 +16,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "moduleResolution": "node",
-    "baseUrl": ".",
+    "moduleResolution": "bundler",
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@/*": [
