@@ -253,6 +253,7 @@ export default function UserProfilePage() {
                       type="text"
                       value={user.name || ''}
                       disabled
+                      placeholder="Name"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900"
                     />
                   </div>
@@ -265,6 +266,7 @@ export default function UserProfilePage() {
                       type="email"
                       value={user.email}
                       disabled
+                      placeholder="Email"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900"
                     />
                   </div>
@@ -279,6 +281,7 @@ export default function UserProfilePage() {
                         'en-BD'
                       )}
                       disabled
+                      placeholder="Member Since"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900"
                     />
                   </div>
