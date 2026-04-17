@@ -48,7 +48,7 @@ export const API_ENDPOINTS = {
 export async function apiCall(
   endpoint: string,
   options: RequestInit = {}
-): Promise<any> {
+): Promise<Record<string, unknown>> {
   const url = `${API_BASE_URL}${endpoint}`
   
   const defaultOptions: RequestInit = {

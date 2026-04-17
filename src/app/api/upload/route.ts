@@ -41,7 +41,13 @@ export async function POST(request: NextRequest) {
       uploadStream.end(buffer)
     })
 
-    const uploadResult = result as any
+    interface UploadResult {
+      secure_url: string
+      public_id: string
+      width: number
+      height: number
+    }
+    const uploadResult = result as UploadResult
 
     return NextResponse.json({
       success: true,

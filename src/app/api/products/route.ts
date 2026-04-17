@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10')
 
     // Build filter object
-    const filter: any = {}
+    const filter: Record<string, string> = {}
     if (category) filter.category = category
     if (brand) filter.brand = brand
 
