@@ -46,7 +46,7 @@ export default function AdminUserManagementPage() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [router])
 
   useEffect(() => {
     if (!user) {
