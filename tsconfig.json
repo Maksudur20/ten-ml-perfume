@@ -17,6 +17,7 @@
     "noEmit": true,
     "jsx": "preserve",
     "moduleResolution": "node",
+    "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@/*": [
