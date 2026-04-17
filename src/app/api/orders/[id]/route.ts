@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/lib/mongoose'
+import { connectDB } from '@/lib/mongoose'
 import Order from '@/models/Order'
 import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
 
@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    await connect()
+    await connectDB()
 
     const order = await Order.findById(params.id)
 
@@ -43,7 +43,7 @@ export async function PATCH(
     const body = await req.json()
     const { status, notes } = body
 
-    await connect()
+    await connectDB()
 
     // Verify admin access
     const token = extractTokenFromRequest(req)
@@ -102,7 +102,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    await connect()
+    await connectDB()
 
     // Verify admin access
     const token = extractTokenFromRequest(req)

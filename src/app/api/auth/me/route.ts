@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/lib/mongoose'
+import { connectDB } from '@/lib/mongoose'
 import User from '@/models/User'
 import { verifyToken } from '@/lib/auth'
 
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid token' }, { status: 401 })
     }
 
-    await connect()
+    await connectDB()
 
     const user = await User.findById(decoded.userId).select('-password')
 

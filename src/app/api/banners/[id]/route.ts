@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/lib/mongoose'
+import { connectDB } from '@/lib/mongoose'
 import Banner from '@/models/Banner'
 import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
 import { Types } from 'mongoose'
@@ -37,7 +37,7 @@ export async function PUT(
     const body = await req.json()
     const { title, image, link, position, isActive, cloudinaryPublicId } = body
 
-    await connect()
+    await connectDB()
 
     // Find and update banner
     const updatedBanner = await Banner.findByIdAndUpdate(
@@ -106,7 +106,7 @@ export async function DELETE(
       )
     }
 
-    await connect()
+    await connectDB()
 
     // Find and delete banner
     const deletedBanner = await Banner.findByIdAndDelete(params.id)

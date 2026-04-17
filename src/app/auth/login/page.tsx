@@ -173,7 +173,7 @@ export default function LoginPage() {
         {/* Footer */}
         <div className="bg-gray-50 px-6 py-4 rounded-b-lg border-t border-gray-200">
           <p className="text-sm text-gray-600 text-center">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/auth/register" className="text-burgundy-600 hover:text-burgundy-700 font-semibold">
               Create one
             </Link>

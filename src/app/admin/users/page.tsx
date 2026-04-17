@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 
@@ -21,20 +21,7 @@ export default function AdminUserManagementPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login')
-      return
-    }
-
-    // Check if user is admin (you should add proper admin check)
-    // For now, allow any authenticated user
-    // In production, verify user has admin role
-
-    fetchUsers()
-  }, [user, router])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true)
       const token = localStorage.getItem('authToken')
@@ -59,7 +46,20 @@ export default function AdminUserManagementPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login')
+      return
+    }
+
+    // Check if user is admin (you should add proper admin check)
+    // For now, allow any authenticated user
+    // In production, verify user has admin role
+
+    fetchUsers()
+  }, [user, router, fetchUsers])
 
   const deleteUser = async (userId: string) => {
     try {

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/lib/mongoose'
+import { connectDB } from '@/lib/mongoose'
 import Banner from '@/models/Banner'
 import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   try {
-    await connect()
+    await connectDB()
 
     // Get all active banners, sorted by position
     const banners = await Banner.find({ isActive: true }).sort({ position: 1 })
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    await connect()
+    await connectDB()
 
     // Create new banner
     const newBanner = await Banner.create({

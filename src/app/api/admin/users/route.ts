@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/lib/mongoose'
+import { connectDB } from '@/lib/mongoose'
 import User from '@/models/User'
 import Order from '@/models/Order'
 import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    await connect()
+    await connectDB()
 
     // Get all users with order count
     const users = await User.find({}, { password: 0 }).sort({ createdAt: -1 })

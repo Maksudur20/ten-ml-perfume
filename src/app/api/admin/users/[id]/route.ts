@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/lib/mongoose'
+import { connectDB } from '@/lib/mongoose'
 import User from '@/models/User'
 import Order from '@/models/Order'
 import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
@@ -26,7 +26,7 @@ export async function GET(
       )
     }
 
-    await connect()
+    await connectDB()
 
     const user = await User.findById(params.id, { password: 0 })
 
@@ -92,7 +92,7 @@ export async function DELETE(
       )
     }
 
-    await connect()
+    await connectDB()
 
     const user = await User.findByIdAndDelete(params.id)
 

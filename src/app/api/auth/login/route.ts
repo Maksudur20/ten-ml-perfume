@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { connect } from '@/lib/mongoose'
+import { connectDB } from '@/lib/mongoose'
 import User from '@/models/User'
 
 export async function POST(req: NextRequest) {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Connect to database
-    await connect()
+    await connectDB()
 
     // Find user by email (need to select password field)
     const user = await User.findOne({ email: email.toLowerCase() }).select(

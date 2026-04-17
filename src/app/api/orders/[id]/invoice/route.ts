@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/lib/mongoose'
+import { connectDB } from '@/lib/mongoose'
 import Order from '@/models/Order'
 import { generateInvoicePDF } from '@/lib/invoiceGenerator'
 
@@ -8,9 +8,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    await connect()
-
-    const order = await Order.findById(params.id)
+      await connectDB()
 
     if (!order) {
       return NextResponse.json(
