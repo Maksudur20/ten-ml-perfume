@@ -43,6 +43,13 @@ export async function GET(req: NextRequest) {
       status: 'success',
       count: products.length,
       products,
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Surrogate-Control': 'no-store',
+      },
     })
   } catch (error) {
     return NextResponse.json(

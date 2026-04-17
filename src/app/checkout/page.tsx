@@ -43,8 +43,8 @@ export default function CheckoutPage() {
       const deliveryCharge = getDeliveryCharge(formData.city)
       const orderTotal = cartTotal + deliveryCharge
 
-      // Create order with tracking code
-      const newOrder = addOrder({
+      // Create order locally
+      const localOrder = addOrder({
         customerName: formData.name,
         customerEmail: formData.email,
         customerPhone: formData.phone,
@@ -63,8 +63,41 @@ export default function CheckoutPage() {
         status: 'pending',
       })
 
+      // Also save to database via API
+      const token = localStorage.getItem('authToken')
+      const apiResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+        body: JSON.stringify({
+          customerName: formData.name,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          customerAddress: formData.address,
+          customerCity: formData.city,
+          items: cart.map((item) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            size: item.size,
+            quantity: item.quantity,
+          })),
+          subtotal: cartTotal,
+          discount: 0,
+          deliveryCharge: deliveryCharge,
+          total: orderTotal,
+        }),
+      })
+
+      if (!apiResponse.ok) {
+        console.error('Failed to save order to database')
+        // Continue anyway with local order
+      }
+
       // Order placement successful
-      setCreatedOrder(newOrder)
+      setCreatedOrder(localOrder)
       setOrderPlaced(true)
       clearCart()
     } catch (error) {

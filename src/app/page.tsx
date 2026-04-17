@@ -4,13 +4,11 @@ import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { Banner } from '@/components/Banner'
 import { ProductGrid } from '@/components/ProductGrid'
-import { products } from '@/data/products'
 import Link from 'next/link'
-import { useAdmin } from '@/context/AdminContext'
+import { useProducts } from '@/hooks/useProducts'
 
 export default function Home() {
-  const { adminProducts } = useAdmin()
-  const allProducts = [...products, ...adminProducts]
+  const { products, loading, error } = useProducts()
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -116,12 +114,24 @@ export default function Home() {
               Handpicked fragrances from the world&apos;s most prestigious niche houses, delivered fresh in premium travel atomizers.
             </p>
           </div>
-          <ProductGrid products={allProducts} />
-          <div className="text-center mt-12">
-            <Link href="/shop" className="btn-glass-light text-lg px-8 py-3 inline-block">
-              Explore All Fragrances
-            </Link>
-          </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Loading products...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-600">Error loading products: {error}</p>
+            </div>
+          ) : (
+            <>
+              <ProductGrid products={products} />
+              <div className="text-center mt-12">
+                <Link href="/shop" className="btn-glass-light text-lg px-8 py-3 inline-block">
+                  Explore All Fragrances
+                </Link>
+              </div>
+            </>
+          )}
         </section>
 
         {/* Premium Features */}

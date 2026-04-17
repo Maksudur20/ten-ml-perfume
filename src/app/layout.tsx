@@ -5,6 +5,7 @@ import { OrderProvider } from '@/context/OrderContext'
 import { WishlistProvider } from '@/context/WishlistContext'
 import { NotificationProvider } from '@/context/NotificationContext'
 import { ReviewProvider } from '@/context/ReviewContext'
+import { ProductCacheProvider } from '@/context/ProductCacheContext'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -20,19 +21,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <AdminProvider>
-          <OrderProvider>
-            <CartProvider>
-              <WishlistProvider>
-                <NotificationProvider>
-                  <ReviewProvider>
-                    {children}
-                  </ReviewProvider>
-                </NotificationProvider>
-              </WishlistProvider>
-            </CartProvider>
-          </OrderProvider>
-        </AdminProvider>
+        <ProductCacheProvider>
+          <AdminProvider>
+            <OrderProvider>
+              <CartProvider>
+                <WishlistProvider>
+                  <NotificationProvider>
+                    <ReviewProvider>
+                      {children}
+                    </ReviewProvider>
+                  </NotificationProvider>
+                </WishlistProvider>
+              </CartProvider>
+            </OrderProvider>
+          </AdminProvider>
+        </ProductCacheProvider>
       </body>
     </html>
   )
