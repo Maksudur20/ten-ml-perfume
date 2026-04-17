@@ -123,7 +123,6 @@ const OrderSchema = new Schema<IOrder>(
 OrderSchema.index({ userId: 1, createdAt: -1 })
 // Index for tracking by email
 OrderSchema.index({ customerEmail: 1 })
-// Index for tracking by tracking code
-OrderSchema.index({ trackingCode: 1 })
+// Note: trackingCode already has unique: true which creates an index, so we don't need an explicit index here
 
 export default mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema)
