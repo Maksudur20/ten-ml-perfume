@@ -187,6 +187,8 @@ export default function AddProductPage() {
                 checked={stockOut}
                 onChange={(e) => setStockOut(e.target.checked)}
                 className="w-4 h-4 rounded border-gray-300 focus:ring-burgundy-500"
+                title="Mark product as out of stock"
+                aria-label="Stock out checkbox"
               />
               <label className="text-sm font-semibold text-gray-900">Stock Out</label>
             </div>
@@ -396,6 +398,8 @@ export default function AddProductPage() {
                         checked={enabled}
                         onChange={() => toggleSize(size)}
                         className="w-4 h-4 rounded border-gray-300 focus:ring-burgundy-500"
+                        title={`Select ${size} option`}
+                        aria-label={`Select ${size} option`}
                       />
                       <span className="w-40 text-sm font-semibold text-gray-900 capitalize">{size}</span>
                       <div className="flex-1">
