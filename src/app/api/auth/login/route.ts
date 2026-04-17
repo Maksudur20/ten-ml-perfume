@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { connectDB } from '@/lib/mongoose'
-import User from '@/models/User'
+import clientPromise from '@/lib/mongodb'
+import { ObjectId } from 'mongodb'
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,12 +18,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Connect to database
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const usersCollection = db.collection('users')
 
-    // Find user by email (need to select password field)
-    const user = await User.findOne({ email: email.toLowerCase() }).select(
-      '+password'
-    )
+    // Find user by email
+    const user = await usersCollection.findOne({ email: email.toLowerCase() })
 
     if (!user) {
       return NextResponse.json(

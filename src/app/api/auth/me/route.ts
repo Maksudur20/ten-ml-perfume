@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connectDB } from '@/lib/mongoose'
-import User from '@/models/User'
+import clientPromise from '@/lib/mongodb'
 import { verifyToken } from '@/lib/auth'
+import { ObjectId } from 'mongodb'
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,9 +17,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid token' }, { status: 401 })
     }
 
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const usersCollection = db.collection('users')
 
-    const user = await User.findById(decoded.userId).select('-password')
+    const user = await usersCollection.findOne({
+      _id: new ObjectId(decoded.userId)
+    })
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 })

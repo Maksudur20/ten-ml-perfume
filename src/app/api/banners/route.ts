@@ -1,14 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connectDB } from '@/lib/mongoose'
-import Banner from '@/models/Banner'
+import clientPromise from '@/lib/mongodb'
 import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   try {
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const bannersCollection = db.collection('banners')
 
     // Get all active banners, sorted by position
-    const banners = await Banner.find({ isActive: true }).sort({ position: 1 })
+    const banners = await bannersCollection
+      .find({ isActive: true })
+      .sort({ position: 1 })
+      .toArray()
 
     return NextResponse.json(
       {
@@ -56,17 +60,23 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const bannersCollection = db.collection('banners')
 
     // Create new banner
-    const newBanner = await Banner.create({
+    const result = await bannersCollection.insertOne({
       title,
       image,
       link,
       position: position || 0,
       isActive: isActive !== undefined ? isActive : true,
       cloudinaryPublicId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })
+
+    const newBanner = await bannersCollection.findOne({ _id: result.insertedId })
 
     return NextResponse.json(
       {

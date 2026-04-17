@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connectDB } from '@/lib/mongoose'
-import Order from '@/models/Order'
+import clientPromise from '@/lib/mongodb'
 import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
+import { ObjectId } from 'mongodb'
 
 // Generate unique tracking code
 function generateTrackingCode(): string {
@@ -15,7 +15,9 @@ function generateTrackingCode(): string {
 
 export async function GET(req: NextRequest) {
   try {
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const ordersCollection = db.collection('orders')
 
     // Check if user is authenticated
     const token = extractTokenFromRequest(req)
@@ -37,13 +39,19 @@ export async function GET(req: NextRequest) {
 
     if (trackingCode) {
       // Get order by tracking code
-      orders = await Order.findOne({ trackingCode: trackingCode.toUpperCase() })
+      orders = await ordersCollection.findOne({ trackingCode: trackingCode.toUpperCase() })
     } else if (userId) {
       // Get all orders for authenticated user
-      orders = await Order.find({ userId }).sort({ createdAt: -1 })
+      orders = await ordersCollection
+        .find({ userId: new ObjectId(userId) })
+        .sort({ createdAt: -1 })
+        .toArray()
     } else if (email) {
       // Get orders by email (for guests)
-      orders = await Order.find({ customerEmail: email.toLowerCase() }).sort({ createdAt: -1 })
+      orders = await ordersCollection
+        .find({ customerEmail: email.toLowerCase() })
+        .sort({ createdAt: -1 })
+        .toArray()
     } else {
       return NextResponse.json(
         { message: 'Please provide trackingCode, email, or authenticate' },
@@ -102,7 +110,9 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const ordersCollection = db.collection('orders')
 
     // Get userId if authenticated
     const token = extractTokenFromRequest(req)
@@ -111,20 +121,20 @@ export async function POST(req: NextRequest) {
     if (token) {
       const decoded = verifyToken(token)
       if (decoded) {
-        userId = decoded.userId
+        userId = new ObjectId(decoded.userId)
       }
     }
 
     // Generate unique tracking code
     let trackingCode = generateTrackingCode()
-    let existingOrder = await Order.findOne({ trackingCode })
+    let existingOrder = await ordersCollection.findOne({ trackingCode })
     while (existingOrder) {
       trackingCode = generateTrackingCode()
-      existingOrder = await Order.findOne({ trackingCode })
+      existingOrder = await ordersCollection.findOne({ trackingCode })
     }
 
     // Create new order
-    const newOrder = await Order.create({
+    const result = await ordersCollection.insertOne({
       userId,
       trackingCode,
       customerName,
@@ -140,13 +150,17 @@ export async function POST(req: NextRequest) {
       status: 'pending',
       paymentMethod,
       notes,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })
+
+    const newOrder = await ordersCollection.findOne({ _id: result.insertedId })
 
     return NextResponse.json(
       {
         message: 'Order created successfully',
         order: newOrder,
-        trackingCode: newOrder.trackingCode,
+        trackingCode: newOrder?.trackingCode,
       },
       { status: 201 }
     )

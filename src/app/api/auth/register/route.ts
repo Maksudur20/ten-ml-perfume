@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcryptjs from 'bcryptjs'
-import { connectDB } from '@/lib/mongoose'
-import User from '@/models/User'
+import clientPromise from '@/lib/mongodb'
 
 export async function POST(req: NextRequest) {
   try {
@@ -50,10 +49,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Connect to database
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const usersCollection = db.collection('users')
 
     // Check if user already exists
-    const existingUser = await User.findOne({
+    const existingUser = await usersCollection.findOne({
       $or: [{ email: email.toLowerCase() }, { username: username.toLowerCase() }],
     })
 
@@ -77,11 +78,13 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await bcryptjs.hash(password, salt)
 
     // Create new user
-    const newUser = await User.create({
+    const result = await usersCollection.insertOne({
       username: username.toLowerCase(),
       email: email.toLowerCase(),
       password: hashedPassword,
       isAdmin: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })
 
     // Return success (don't return password)
@@ -89,9 +92,9 @@ export async function POST(req: NextRequest) {
       {
         message: 'Registration successful',
         user: {
-          id: newUser._id,
-          username: newUser.username,
-          email: newUser.email,
+          id: result.insertedId,
+          username: username.toLowerCase(),
+          email: email.toLowerCase(),
         },
       },
       { status: 201 }
