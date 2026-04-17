@@ -1,12 +1,13 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { connectDB } from '@/lib/mongoose'
-import Product from '@/models/Product'
+import clientPromise from '@/lib/mongodb'
 
 // GET all products with optional filtering
 export async function GET(request: NextRequest) {
   try {
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const productsCollection = db.collection('products')
 
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
@@ -15,15 +16,20 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10')
 
     // Build filter object
-    const filter: Record<string, string> = {}
+    const filter: Record<string, any> = {}
     if (category) filter.category = category
     if (brand) filter.brand = brand
 
     const skip = (page - 1) * limit
 
-    const products = await Product.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 })
+    const products = await productsCollection
+      .find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .toArray()
 
-    const total = await Product.countDocuments(filter)
+    const total = await productsCollection.countDocuments(filter)
 
     return NextResponse.json({
       success: true,
@@ -56,10 +62,12 @@ export async function GET(request: NextRequest) {
 // POST new product (with image upload)
 export async function POST(request: NextRequest) {
   try {
-    await connectDB()
+    const client = await clientPromise
+    const db = client.db('perfume_store')
+    const productsCollection = db.collection('products')
 
     const body = await request.json()
-    const { name, brand, category, price, description, image, stock, volume } = body
+    const { name, brand, category, price, description, image, stock, volume, sizes, variantPrices, inStock } = body
 
     // Validation
     if (!name || !brand || !category || !price || !description || !image) {
@@ -69,24 +77,30 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create product
-    const product = new Product({
+    // Create product object
+    const product = {
+      id: Date.now().toString(),
       name,
       brand,
       category,
       price,
       description,
       image,
-      stock: stock || 0,
-      volume: volume || 10,
-    })
+      notes: [],
+      isHot: false,
+      sizes: sizes || ['10ml'],
+      variantPrices: variantPrices || {},
+      inStock: inStock !== false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
 
-    await product.save()
+    const result = await productsCollection.insertOne(product as any)
 
     return NextResponse.json(
       {
         success: true,
-        data: product,
+        data: { ...product, _id: result.insertedId },
         message: 'Product created successfully',
       },
       { status: 201 }
