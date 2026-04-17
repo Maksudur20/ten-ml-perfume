@@ -272,6 +272,8 @@ export default function BannerManagement() {
                 name="position"
                 value={formData.position}
                 onChange={handleChange}
+                placeholder="Enter position order"
+                title="Position Order"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500"
               />
             </div>
