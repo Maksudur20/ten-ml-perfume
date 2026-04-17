@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/src/lib/mongoose'
-import Order from '@/src/models/Order'
-import { generateInvoicePDF } from '@/src/lib/invoiceGenerator'
+import { connect } from '@/lib/mongoose'
+import Order from '@/models/Order'
+import { generateInvoicePDF } from '@/lib/invoiceGenerator'
 
 export async function GET(
   req: NextRequest,

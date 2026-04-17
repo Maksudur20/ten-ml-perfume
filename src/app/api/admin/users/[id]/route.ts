@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/src/lib/mongoose'
-import User from '@/src/models/User'
-import Order from '@/src/models/Order'
-import { extractTokenFromRequest, verifyToken } from '@/src/lib/auth'
+import { connect } from '@/lib/mongoose'
+import User from '@/models/User'
+import Order from '@/models/Order'
+import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
 
 export async function GET(
   req: NextRequest,

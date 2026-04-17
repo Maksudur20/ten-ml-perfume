@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/src/lib/mongoose'
-import Banner from '@/src/models/Banner'
-import { extractTokenFromRequest, verifyToken } from '@/src/lib/auth'
+import { connect } from '@/lib/mongoose'
+import Banner from '@/models/Banner'
+import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   try {

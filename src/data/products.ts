@@ -22,10 +22,6 @@ export interface Product {
 
 // Auto-synced from MongoDB database
 export const products: Product[] = []
-    },
-    "inStock": true
-  }
-]
 
 export const categories = [
   { id: 'men', label: 'For Men', icon: '👨' },

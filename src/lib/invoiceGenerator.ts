@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf'
-import { IOrder } from '@/src/models/Order'
+import { IOrder } from '@/models/Order'
 
 export interface InvoiceOptions {
   companyName?: string

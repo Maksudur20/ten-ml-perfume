@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { connect } from '@/src/lib/mongoose'
-import Order from '@/src/models/Order'
-import { extractTokenFromRequest, verifyToken } from '@/src/lib/auth'
+import { connect } from '@/lib/mongoose'
+import Order from '@/models/Order'
+import { extractTokenFromRequest, verifyToken } from '@/lib/auth'
 
 // Generate unique tracking code
 function generateTrackingCode(): string {
